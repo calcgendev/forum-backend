@@ -23,11 +23,13 @@ class ThreadListAPIView(generics.ListAPIView):
     serializer_class = ThreadListSerializer
     permission_classes = [AllowAny]
 
+
 class ThreadCreateAPIView(generics.CreateAPIView):
     queryset = Thread.objects.all()
     serializer_class = ThreadCreateSerializer
     permission_classes = [IsAuthenticated]
     throttle_scope = 'create_thread'
+
 
 class ThreadDetailAPIView(generics.RetrieveAPIView):
     queryset = Thread.objects.all()

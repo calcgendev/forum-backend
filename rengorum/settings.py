@@ -18,10 +18,10 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Environment variables
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'secret key'
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
-
+#ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ALLOWED_HOSTS = ['forumbackend.appspot.com','127.0.0.1']
 # REST_FRAMEWORK
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -111,11 +111,52 @@ WSGI_APPLICATION = 'rengorum.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+# DATABASES = {
+#     # 'default': dj_database_url.config(
+#     #     default=config('DATABASE_URL')
+#     # )
+#     'default': { 
+#       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#       'NAME': 'forum',
+#       'HOST': '/cloudsql/forumbackend:us-central1:forum-db',
+#       'PORT': '5432',
+#       'USER': 'postgres',
+#       'PASSWORD': 'shrestha'
+#     }
+# }
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
-}
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'HOST': '/cloudsql/forumbackend:us-central1:forum-db',
+            'USER': 'postgres',
+            'PORT': '5432',
+            'PASSWORD': 'shrestha',
+            'NAME': 'forum-db',
+        }
+    }
+
+# [START db_setup]
+# if os.getenv('GAE_APPLICATION', None):
+    # Running on production App Engine, so connect to Google Cloud SQL using
+    # the unix socket at /cloudsql/<your-cloudsql-connection string>
+    
+    
+# else:
+    # Running locally so connect to either a local MySQL instance or connect 
+    # to Cloud SQL via the proxy.  To start the proxy via command line: 
+    #    $ cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:3306 
+    # See https://cloud.google.com/sql/docs/mysql-connect-proxy
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #         'HOST': '127.0.0.1',
+    #         'PORT': '5432',
+    #         'NAME': 'forum-db',
+    #         'USER': 'postgres',
+    #         'PASSWORD': 'shrestha',
+    #     }
+    # }
+# [END db_setup]
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -157,11 +198,25 @@ USE_TZ = True
 RENGORUM_DIR = os.path.dirname(BASE_DIR)
 
 BACKEND_DIR = os.path.join(RENGORUM_DIR, 'backend')
-STATIC_ROOT = os.path.join(BACKEND_DIR, 'static')
-STATIC_URL = '/static/'
+# if os.getenv('GAE_APPLICATION', None):
+STATIC_URL = 'https://storage.googleapis.com/app-forum-static/static/'
+STATIC_ROOT='static'
+    
+# else:
+#     STATIC_URL = '/static/'
+#     STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'app-forum-static')
 
+# 
+
+#STATIC_URL = '/static/'
 # MEDIA
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Ref: https://stackoverflow.com/questions/34563454/django-imagefield-upload-to-path
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+
+
+# STATICFILES_DIRS = [
+#   # TODO: configure the name and path to your development static directory
+#     os.path.join(BASE_DIR, 'static'), # static directory (in the top level directory) for local testing
+# ]
