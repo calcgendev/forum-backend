@@ -3,7 +3,7 @@ Django==2.0.12
 gunicorn==19.9.0
 django-cors-headers==2.2.0
 djangorestframework==3.9.1
-pip==19.2
+pip==21.1
 psycopg2==2.7.4
 Pillow==5.1.0
 PyJWT==1.6.1
